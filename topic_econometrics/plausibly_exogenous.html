@@ -41,69 +41,54 @@
 									<span class="image main"><img src="images/pic11.jpg" alt="" /></span>
 
 									<p>
-									Consider the first stage equation with the following variables 
-										\
-									m_it is the message sent (dependent variable)
-									z_it is our excluded instrument or message intensity 
-									(total messages sent over total existing customers at a given time)
-									X_it are our controls. E.g., RFM marketing metrics
-									
-									First Stage Model and Problem with Message Intensity
-									For simplicity, consider only time fixed effects for the first stage model
-									m_it=δz_it+θX_it+μ_t+ ϵ_it
-									This would yield the corresponding fixed effects model
-									m ̃_it=δz ̃_it+θX ̃_it+ϵ ̃_it
-									where m ̃_it=m_it-m ̅_t, z ̃_it=z_it-z ̅_t and X ̃_it=X_it-X ̅_t.
-									However, since z_it is the proportion of messages sent to all customers at time t, this implies
-									z_it= 1/N ∑_(i=1)^N▒m_it =m ̅_t.
-									Therefore, 
-									 z ̃_it= z_it-z ̅_t
-									=m ̅_t-m ̅_t=0.
-									The excluded instrument has no variability.
-									
-									First Stage Model and Message Intensity with Random Groups
-									To deal with the issue of no variability, we assign customers into random groups g∈{1,…,|G|}. We write g_i to denote the group customer  i is in and write G_i to associate it as the random variable assign  i to  g_i. Given these groups, as excluded instruments, we calculate the message intensities with respect to these groups as follows,
-									z_it=(∑_(j=1)^N▒〖m_jt 1{G_j=g_i } 〗)/(∑_(j=1)^N▒1{G_j=g_i } )=(∑_(j=1)^N▒〖m_jt 1{G_j=g_i } 〗)/N_(g_i ) =m ̅_(g_i t).
-									
-									Given this definition of message intensity, the resulting average of this instrument is
-									z ̅_t=1/N ∑_(i=1)^N▒z_it =1/N ∑_(i=1)^N▒m ̅_(g_i t) =  1/N ∑_g▒〖N_g m ̅_gt 〗.
-									Hence, the demeaned values of the instruments are
-									z ̃_it= z_it-z ̅_t
-									=m ̅_(g_i t)-1/N ∑_g▒〖N_g m ̅_gt 〗.
-									When the population of customers N studied is large and the group size |G|is small, even though we still expect that E[z_it-z ̅_t ]=E[m ̅_(g_i t)-1/N ∑_g▒〖N_g m ̅_gt 〗]=0 , we know for sure that Var(m ̅_(g_i t)-1/N ∑_g▒〖N_g m ̅_gt 〗)≠0 and that as |G|→∞, Var(m ̅_(g_i t)-1/N ∑_g▒〖N_g m ̅_gt 〗)>Var(m ̅_(〖g'〗_i t)-1/N ∑_g'▒〖N_g' m ̅_g't 〗) for any g^'∈{1,…,|G^' |} such that |G^' |<|G|.
-									
-									Why Randomized Groups make sense
-									To argue the case, let us consider only 2 random groups, g∈{1,2} and consider a particular time t=τ. As an example let the message intensity in  τ for the respective groups to be  m ̅_1τ=0.8 and m ̅_2τ=0.3. With respect to individuals  i and  j from group 1 and 2, the probability of a message being sent to them is 0.8 and 0.3 respectively. This illustrates that even though the grouping is random, the magnitude of the message intensity is still proportional to the likelihood of the message being sent to the respective customers. The only problem is that because in our case N, is large we will have  m ̅_1t≈m ̅_2t≈m ̅_t for all t and hence the excluded instruments have very little variability and are therefore not very strong instruments.
-									Hence, to circumvent this problem, we can simply increase the number of groups and as long as |G|≪N, we will still have m ̅_gt≈m ̅_t, but what changes is the variability which provides more signal to the model compared to when groupings are small.
-									
+									The foundations of the 2 stage least squares (2SlS) method lies on the ability to find a valid instrument. Consider the following 2 stage model,
+									\begin{equation}
+									\begin{aligned}
+									y &= \beta^\intercal x_1 + \delta x_2 + \epsilon \\
+									x_2 &= \pi^\intercal x_1 + \theta z + \eta.
+									\end{aligned}
+									\end{equation}
+									A valid instrument, \(z\), is defined to be correlated to \(y\) only through \(x_2\). A simple statement but it has many consequences. Common intepretations of this are
+									<ol>
+										<li>
+											\(\mathbb{E}[z\epsilon] = 0 \), covariance of \(z\) and 2nd stage error term \(\epsilon\) is 0.
+										</li>
+										<li>
+											\( \theta\ne 0 \), \(x_2\) must be explained by \(z\).
+										</li>
+									</ol>
+									When an instrument satisfies the above properties, it is also said to satisfy the <b>exclusion restriction</b> requirements.
 									</p>
-									<p>
-									The equations are as follows:
-									
-									
 
+									<p>
+									A lesser known but equivalent interpretation defined by Conley et al (2011) is that when the following equivalent 2 stage model is evaluated
+									\begin{equation}
+									\begin{aligned}
+									y &= \beta^\intercal x_1 + \delta x_2 + \gamma z + \epsilon \\
+									x_2 &= \pi^\intercal x_1 + \theta z + \eta,
+									\end{aligned}
+									\end{equation}
+									the <b>exclusion restriction</b> of \(z\) is fulfilled when \(\gamma = 0\). Note that this model clearly cannot be evaluated through the conventional frequentist approach due to collinearity arising from \(z\)
+									appearing in both the 1st and 2nd stage models but has to estimated through Bayesian methods or other approaches as suggested in Conley et al (2011). More importantly however, this definition allows us to relax
+									the <b>exclusion restriction</b> requirement and instead, allow for that possibility that \(\gamma\ne 0 \) but is sufficiently small such that the estimate of \(\delta\), while no longer unbiased, is sufficiently
+									accurate for practical use or meaningful interpretation. The question is how do we quantify sufficiently small?
 									</p>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
-									<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
+
+									<p>
+									In the simple case where \(x_1\) in the models above are not considered, Conley et al (2011) shows that 
+									\begin{equation}
+									\hat{\delta} \rightarrow \delta + \gamma/\theta.
+									\end{equation}
+									Hence, when \(\theta\) is large, we have a larger buffer against bias due to \(\gamma\ne 0\) and vice versa. In Conley's paper, he and his authors further developed this idea to define confidence intervals for 
+									estimates of \(\hat{\delta}\) under the possibility that the <b>exclusion restriction</b> requirement is mildly violated.
+									</p>
+
 
 									<hr class="major" />
 
 									<h2>Interdum sed dapibus</h2>
 									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
-
-									<hr class="major" />
-
-									<h2>Magna etiam veroeros</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
-									<p>Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.</p>
-
-									<hr class="major" />
-
-									<h2>Lorem aliquam bibendum</h2>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex, lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit.</p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus. Pellentesque aliquam maximus risus, vel sed vehicula.</p>
 
 								</section>
 
